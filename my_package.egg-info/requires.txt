@@ -1,5 +1,5 @@
+
+[dev]
 pytest
 pytest-cov
 build
-wheel
-setuptools
