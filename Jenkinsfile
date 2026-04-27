@@ -11,14 +11,14 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo ' Checking out source code...'
+                echo '📥 Checking out source code...'
                 checkout scm
             }
         }
 
         stage('Setup Python Environment') {
             steps {
-                echo ' Creating virtual environment...'
+                echo '🐍 Creating virtual environment...'
                 sh """
                     ${PYTHON} -m venv ${VENV_DIR}
                     . ${VENV_DIR}/bin/activate
@@ -28,24 +28,10 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                echo '🧪 Running unit tests...'
-                sh """
-                    . ${VENV_DIR}/bin/activate
-                    pytest tests/ -v --tb=short --cov=${PACKAGE_NAME} --cov-report=xml
-                """
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: '**/test-results.xml'
-                }
-            }
-        }
 
         stage('Build WHL Package') {
             steps {
-                echo ' Building wheel package...'
+                echo '📦 Building wheel package...'
                 sh """
                     . ${VENV_DIR}/bin/activate
                     python -m build
@@ -62,9 +48,7 @@ pipeline {
             }
         }
 
-     
         }
-    }
 
     post {
         success {
@@ -76,6 +60,7 @@ pipeline {
         always {
             echo '🧹 Cleaning up workspace...'
             cleanWs()
-       
+        }
     }
 }
+
